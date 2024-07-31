@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐙 interfaces.to</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #febbd0;
+        }
+        .grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('interfaces-to/interfaces-to.png');
+            background-size: 64px 64px;
+            background-repeat: repeat;
+        }
+    </style>
+</head>
+<body>
+    <a href="/interfaces-to/"><div class="grid"></div></a>
+    <script>
+        const grid = document.querySelector('.grid');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let offsetX = 0;
+        let offsetY = 0;
+        let speedX = 1;
+        let speedY = -1;
+
+        function updateGridPosition() {
+            offsetX += speedX;
+            offsetY += speedY;
+            grid.style.backgroundPosition = `${offsetX}px ${offsetY}px`;
+            requestAnimationFrame(updateGridPosition);
+        }
+
+        function setDirection(event) {
+            mouseX = event.clientX || event.touches[0].clientX;
+            mouseY = event.clientY || event.touches[0].clientY;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            speedX = (mouseX - centerX) / Math.abs(mouseX - centerX);
+            speedY = (mouseY - centerY) / Math.abs(mouseY - centerY);
+        }
+
+        document.addEventListener('mousemove', setDirection);
+        document.addEventListener('touchmove', setDirection);
+
+        updateGridPosition();
+    </script>
+</body>
+</html>
