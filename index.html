@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐙 interfaces.to</title>
+    
+    <!-- favicon -->
+    <link rel="icon" href="interfaces-to/interfaces-to.png">
+
+    <title>interfaces.to</title>
     <style>
         body, html {
             margin: 0;
@@ -16,15 +20,43 @@
             width: 100%;
             height: 100%;
             background-image: url('interfaces-to/interfaces-to.png');
-            background-size: 64px 64px;
+            background-size: 32px 32px;
             background-repeat: repeat;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            pointer-events: none;
+        }
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            animation: colorChange 2s infinite steps(1);
+            font-size: calc(7vw + 7vh); /* scale text based on viewport size */
+            font-weight: bolder;
+        }
+        @keyframes colorChange {
+            0%, 50% { color: #D70848; }
+            51%, 100% { color: #950834; }
         }
     </style>
 </head>
 <body>
-    <a href="/interfaces-to/"><div class="grid"></div></a>
+    <a href="/interfaces-to/"><div class="grid"></div>
+        <div class="overlay-text">MAKE LLMs<br/>DO THINGS<br/>IN 4 LOC</div></a>
+    <div class="overlay"></div>
     <script>
         const grid = document.querySelector('.grid');
+        const overlay = document.querySelector('.overlay');
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let offsetX = 0;
@@ -39,6 +71,10 @@
             requestAnimationFrame(updateGridPosition);
         }
 
+        function updateOverlayPosition() {
+            overlay.style.background = `radial-gradient(circle at ${mouseX}px ${mouseY}px, transparent 10vh, rgba(0, 0, 0, 0.9) 60vh)`;
+        }
+
         function setDirection(event) {
             mouseX = event.clientX || event.touches[0].clientX;
             mouseY = event.clientY || event.touches[0].clientY;
@@ -46,12 +82,14 @@
             const centerY = window.innerHeight / 2;
             speedX = (mouseX - centerX) / Math.abs(mouseX - centerX);
             speedY = (mouseY - centerY) / Math.abs(mouseY - centerY);
+            updateOverlayPosition();
         }
 
         document.addEventListener('mousemove', setDirection);
         document.addEventListener('touchmove', setDirection);
 
         updateGridPosition();
+        updateOverlayPosition();
     </script>
 </body>
 </html>
