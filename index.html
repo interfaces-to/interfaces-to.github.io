@@ -3,34 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- favicon -->
     <link rel="icon" href="interfaces-to/interfaces-to.png">
 
-    <title>interfaces.to</title>
+    <title>Interfaces</title>
+    <!-- SEO -->
+    <meta name="description" content="Make LLMs do things in 4 LOC with 🐙 Interfaces aka `into`, the beginner-friendly OpenAI SDK compatible Python package that makes adding tools to LLM-enabled applications easy.">
+    <meta name="keywords" content="interfaces, LLMs, OpenAI, LLM Agents, GPT-3, GPT-4, AI, machine learning, programming, code, python, learn python, software, development, developers, engineers, coders, programmers, tech, technology, web, internet, integrations, slack, notion, airtable">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#febbd0">
+    <meta property="og:url" content="https://interfaces.to/">
+    <meta property="og:title" content="🐙 Interfaces">
+    <meta property="og:description" content="Make LLMs do things in 4 LOC">
+
     <style>
         body, html {
-            margin: 0;
+            margin: -32px; /* Negative margin to ensure the grid extends beyond the window */
             padding: 0;
+            width: calc(100vw + 128px); /* Adjust width to compensate for negative margins */
+            height: calc(100vh + 128px); /* Adjust height to compensate for negative margins */
             overflow: hidden;
             background-color: #febbd0;
         }
         .grid {
+            display: flex;
+            flex-wrap: wrap;
             position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% + 128px);
+            height: calc(100% + 128px);
+        }
+        .image-container {
+            width: 64px;
+            height: 64px;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        .image-container img {
             width: 100%;
             height: 100%;
-            background-image: url('interfaces-to/interfaces-to.png');
-            background-size: 32px 32px;
-            background-repeat: repeat;
+            object-fit: cover;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .image-container img.flip {
+            transform: rotateY(180deg);
         }
         .overlay {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: calc(100% + 128px);
+            height: calc(100% + 128px);
             background: rgba(0, 0, 0, 0.9);
             pointer-events: none;
+            z-index: 2;
         }
         .overlay-text {
             position: absolute;
@@ -43,6 +72,7 @@
             animation: colorChange 2s infinite steps(1);
             font-size: calc(7vw + 7vh); /* scale text based on viewport size */
             font-weight: bolder;
+            z-index: 1;
         }
         @keyframes colorChange {
             0%, 50% { color: #D70848; }
@@ -51,10 +81,124 @@
     </style>
 </head>
 <body>
-    <a href="/interfaces-to/"><div class="grid"></div>
-        <div class="overlay-text">MAKE LLMs<br/>DO THINGS<br/>IN 4 LOC</div></a>
-    <div class="overlay"></div>
+    <div class="overlay" style="background: radial-gradient(circle at 516px 17px, transparent 10vh, rgba(0, 0, 0, 0.9) 60vh);"></div>
+    
+    <a href="https://github.com/interfaces-to/interfaces-to/">
+        <div class="grid" style="background-position: -36px -1186px;"></div>
+        <div class="overlay-text">MAKE LLMs<br>DO THINGS<br>IN 4 LOC</div>
+        
+    </a>
     <script>
+        const images = ['images/slack.png', 'images/notion.png', 'images/openai.png'];
+        const interfacesToImage = 'interfaces-to/interfaces-to.png';
+        const flipTimeout = 5000; // 5 seconds
+
+        function getRandomAlt() {
+            return images[Math.floor(Math.random() * images.length)];
+        }
+
+        function createImageElement(src, alt) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = alt;
+            return img;
+        }
+
+        function createImageContainer() {
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+            return container;
+        }
+
+        function getImageSrc(i, j, totalColumns, previousGrid) {
+            const isRandomImageAllowed = (i, j) => {
+                const directions = [
+                    [-1, 0], [1, 0], [0, -1], [0, 1],
+                    [-1, -1], [-1, 1], [1, -1], [1, 1]
+                ];
+
+                for (const [dx, dy] of directions) {
+                    const ni = i + dx;
+                    const nj = j + dy;
+                    if (ni >= 0 && ni < previousGrid.length && nj >= 0 && nj < previousGrid[0].length) {
+                        if (images.includes(previousGrid[ni][nj])) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            };
+
+            if (Math.random() < 0.9) {
+                return interfacesToImage;
+            } else if (isRandomImageAllowed(i, j)) {
+                return images[Math.floor(Math.random() * images.length)];
+            } else {
+                return interfacesToImage;
+            }
+        }
+
+        function populateGrid() {
+            const grid = document.querySelector('.grid');
+            grid.innerHTML = '';
+            const totalColumns = Math.ceil(window.innerWidth / 64) + 2;
+            const totalRows = Math.ceil(window.innerHeight / 64) + 2;
+            const previousGrid = Array.from({ length: totalRows }, () => Array(totalColumns).fill(interfacesToImage));
+
+            for (let i = 0; i < totalRows; i++) {
+                for (let j = 0; j < totalColumns; j++) {
+                    const container = createImageContainer();
+                    const imgSrc = getImageSrc(i, j, totalColumns, previousGrid);
+                    previousGrid[i][j] = imgSrc;
+                    const alt = getRandomAlt();
+                    const imgElement = createImageElement(imgSrc, alt);
+                    container.appendChild(imgElement);
+                    grid.appendChild(container);
+                }
+            }
+        }
+
+        function flipImage(img) {
+            const newSrc = img.src.includes(interfacesToImage)
+                ? images[Math.floor(Math.random() * images.length)]
+                : interfacesToImage;
+
+            img.classList.add('flip');
+            setTimeout(() => {
+                img.src = newSrc;
+                img.alt = getRandomAlt();
+                img.classList.remove('flip');
+            }, 300);
+        }
+
+        function flipImagesRandomly() {
+            const allImages = document.querySelectorAll('.image-container img');
+            const lastFlipped = new Map();
+
+            setInterval(() => {
+                const now = Date.now();
+                let eligibleImages = Array.from(allImages).filter(img => {
+                    return !lastFlipped.has(img) || (now - lastFlipped.get(img)) >= flipTimeout;
+                });
+
+                if (eligibleImages.length > 0) {
+                    const randomImage = eligibleImages[Math.floor(Math.random() * eligibleImages.length)];
+                    flipImage(randomImage);
+                    lastFlipped.set(randomImage, now);
+                }
+            }, 1000); // Flip one image every second
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateGrid();
+            flipImagesRandomly();
+        });
+
+        window.addEventListener('resize', () => {
+            populateGrid();
+            flipImagesRandomly();
+        });
+
         const grid = document.querySelector('.grid');
         const overlay = document.querySelector('.overlay');
         let mouseX = window.innerWidth / 2;
