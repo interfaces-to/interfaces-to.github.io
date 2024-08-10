@@ -9,13 +9,13 @@
 
     <title>Interfaces</title>
     <!-- SEO -->
-    <meta name="description" content="Make LLMs do things in 4 LOC with 🐙 Interfaces aka `into`, the beginner-friendly OpenAI SDK compatible Python package that makes adding tools to LLM-enabled applications easy.">
+    <meta name="description" content="Make LLMs do things in 3 LOC with 🐙 Interfaces aka `into`, the beginner-friendly OpenAI SDK compatible Python package that makes building agents and adding tools to LLM-enabled applications easy.">
     <meta name="keywords" content="interfaces, LLMs, OpenAI, LLM Agents, GPT-3, GPT-4, AI, machine learning, programming, code, python, learn python, software, development, developers, engineers, coders, programmers, tech, technology, web, internet, integrations, slack, notion, airtable">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#febbd0">
     <meta property="og:url" content="https://interfaces.to/">
     <meta property="og:title" content="🐙 Interfaces">
-    <meta property="og:description" content="Make LLMs do things in 4 LOC">
+    <meta property="og:description" content="Make LLMs do things in 3 LOC">
 
     <style>
         body, html {
@@ -86,12 +86,26 @@
     
     <a href="https://github.com/interfaces-to/interfaces-to/">
         <div class="grid" style="background-position: -36px -1186px;"></div>
-        <div class="overlay-text">MAKE LLMs<br>DO THINGS<br>IN 4 LOC</div>
-        
+        <div class="overlay-text">MAKE LLMs<br>DO THINGS<br>IN 3 LOC</div>
     </a>
     <script>
-        const images = ['images/slack.png', 'images/notion.png', 'images/openai.png', 'images/airtable.png', 'images/peopledatalabs.png'];
+        const images = ['images/slack.png', 'images/notion.png', 'images/openai.png', 'images/airtable.png', 'images/peopledatalabs.png',
+            'images/cli.png', 'images/fastapi.png', 'images/ngrok.png', 'images/gradio.png'
+        ];
+
+        // load all the images in the background
+        images.forEach(image => {
+            const img = new Image();
+            img.src = image;
+        });
+
         const interfacesToImage = 'interfaces-to/interfaces-to.png';
+        
+        // load the interfaces-to image in the background
+        const img = new Image();
+        img.src = interfacesToImage;
+
+
         const flipTimeout = 5000; // 5 seconds
 
         function getRandomAlt() {
@@ -130,9 +144,7 @@
                 return true;
             };
 
-            if (Math.random() < 0.9) {
-                return interfacesToImage;
-            } else if (isRandomImageAllowed(i, j)) {
+            if (isRandomImageAllowed(i, j)) {
                 return images[Math.floor(Math.random() * images.length)];
             } else {
                 return interfacesToImage;
